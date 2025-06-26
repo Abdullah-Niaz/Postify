@@ -86,6 +86,8 @@ Postify/
 │   └── urls.py
 ├── manage.py
 ├── .env
+├── vercel.json
+├── package.json
 └── requirements.txt
 ```
 
