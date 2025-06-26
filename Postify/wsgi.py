@@ -18,5 +18,5 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Postify.settings")
 
 application = get_wsgi_application()
 application = WhiteNoise(
-    application, root=os.path.join(BASE_DIR, 'static'))
+    application, root=os.path.join(BASE_DIR, 'staticfiles'))
 app = get_wsgi_application()
