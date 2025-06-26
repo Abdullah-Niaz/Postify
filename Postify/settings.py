@@ -100,9 +100,9 @@ WSGI_APPLICATION = "Postify.wsgi.application"
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'postgres',
-#         'USER': 'postgres.tvoordhzhmcshgreawjk',
-#         'PASSWORD': 'H3D-L7&92z_qN6T',
-#         'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '',
 #         'PORT': '6543',
 #         'OPTIONS': {
 #             'sslmode': 'require',
