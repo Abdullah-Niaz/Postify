@@ -1,33 +1,20 @@
-{% extends "../base.html" %} 
-{% load static %}
-{% block links %}
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
-{% endblock links %}
-
-{% block title %}
-  Blog:Register
-{% endblock title %}
-  
-{% block content %}
+{% extends "../base.html" %} {% load static %} {% block links %}
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" />
+{% endblock links %} {% block title %} Blog:Register {% endblock title %} {%
+block content %}
 <div class="box-form box-register">
   <div class="left">
     <div class="overlay">
       <h1>Hello World.</h1>
-      <p>
-        All you need in TECH.
-      </p>
-      
+      <p>All you need in TECH.</p>
     </div>
   </div>
   <div class="right">
     <h5>Register</h5>
-    <p>
-      Do have an account? <a href="{% url 'login' %}">Login</a> 
-    </p>
+    <p>Do have an account? <a href="{% url 'login' %}">Login</a></p>
     <form class="inputs" method="post" action="{% url 'accounts:register' %}">
-      {% csrf_token %} 
-      {{ form }}
-      <input type="submit" value="Register"/>
+      {% csrf_token %} {{ form }}
+      <input type="submit" value="Register" />
       <input type="hidden" name="next" value="{{ next }}" />
     </form>
 
