@@ -47,20 +47,20 @@ Postify is a simple yet functional blog application built using Django. It allow
 
 4. **Set up environment variables:**
 
-   Create a `.env` file in the root directory:
+Create a `.env` file in the root directory:
 
-   ```env
+```env
    DEBUG=True
    SECRET_KEY=your-secret-key
    DATABASE_URL=sqlite:///db.sqlite3
-   ```
+```
 
 5. **Run migrations:**
 
-   ```bash
+```bash
    python manage.py makemigrations
    python manage.py migrate
-   ```
+```
 
 6. **Run the server:**
 
