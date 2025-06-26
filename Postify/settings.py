@@ -174,9 +174,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = []  
+STATICFILES_DIRS = []
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # collectstatic target
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
