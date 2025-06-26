@@ -1,8 +1,3 @@
-Here’s a clean and simple `README.md` for your Django blog web app project **Postify**:
-
----
-
-````markdown
 # 📝 Postify - A Django Blog Web App
 
 Postify is a simple yet functional blog application built using Django. It allows users to write, categorize, and manage blog articles with features like comments, image uploads, user authentication, voting, and bookmarking.
