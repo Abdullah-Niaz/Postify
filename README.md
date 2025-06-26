@@ -27,24 +27,23 @@ Postify is a simple yet functional blog application built using Django. It allow
 
 1. **Clone the repo:**
 
-   ```bash
+```bash
    git clone https://github.com/yourusername/Postify.git
    cd Postify
-   ```
-````
+```
 
 2. **Create a virtual environment and activate it:**
 
-   ```bash
+```bash
    python3 -m venv env
    source env/bin/activate
-   ```
+```
 
 3. **Install dependencies:**
 
-   ```bash
+```bash
    pip install -r requirements.txt
-   ```
+```
 
 4. **Set up environment variables:**
 
@@ -65,9 +64,9 @@ Postify is a simple yet functional blog application built using Django. It allow
 
 6. **Run the server:**
 
-   ```bash
+```bash
    python manage.py runserver
-   ```
+```
 
 7. Visit:
    `http://127.0.0.1:8000/`
