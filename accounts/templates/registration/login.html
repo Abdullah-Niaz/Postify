@@ -1,59 +1,61 @@
-{% extends "../base.html" %} 
+{% extends "../base.html" %}
 {% load static %}
-{% block links %}
-<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
-{% endblock links %}
 
-{% block title %}
-  Blog:Login
-{% endblock title %}
-  
+{% block title %}Sign In — Postify{% endblock title %}
+
 {% block content %}
-<div class="box-form">
-  <div class="left">
-    <div class="overlay">
-      <h1>Hello World.</h1>
-      <p>
-        All you need in TECH.
+<div class="editorial-auth-shell">
+  <div class="editorial-auth-card">
+    <header class="auth-header">
+      <div class="auth-meta-badge">Reader Access · The Living Journal</div>
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">
+        Don’t have an account yet?
+        <a href="{% url 'accounts:register' %}">Create an Account</a>
       </p>
-      
-    </div>
-  </div>
-  <div class="right">
+    </header>
+
     {% if form.errors %}
-      <p class="error" style="color: #fefefe;">Your username and password didn't match. Please try again.</p>
+      <div class="editorial-alert alert-error" role="alert" style="margin-bottom: 20px;">
+        <div>
+          <strong>Authentication Error:</strong> Your username and password didn’t match our records. Please try again.
+        </div>
+      </div>
     {% endif %}
-    {% if next %} 
-    {% if user.is_authenticated %}
-    <div class="alert alert-danger" role="alert">
-      <p class="error" style="color: #fefefe;">
-        Your account doesn't have access to this page. To proceed, please login
-        with an account that has access.
-      </p>
-    </div>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %} 
+
+    {% if next and user.is_authenticated %}
+      <div class="editorial-alert alert-error" role="alert" style="margin-bottom: 20px;">
+        <div>
+          Your account does not have authorization to view this section.
+        </div>
+      </div>
     {% endif %}
-    <h5>Login</h5>
-    <p>
-      Don't have an account? <a href="{% url 'accounts:register' %}">Creat Your Account</a> it takes less
-      than a minute
-    </p>
-    <form class="inputs" method="post" action="{% url 'login' %}">
-      {% csrf_token %} 
-      {{ form.username.label_tag }} 
-      {{ form.username }} 
-      {{form.password.label_tag }} 
-      {{ form.password }}
-      <input type="submit" value="login"/>
+
+    <form method="post" action="{% url 'login' %}" class="editorial-auth-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">1. Username</label>
+        {{ form.username }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">2. Password</label>
+        {{ form.password }}
+      </div>
+
       <input type="hidden" name="next" value="{{ next }}" />
+
+      <button type="submit" class="btn-editorial btn-editorial-primary auth-submit-btn">
+        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Sign In to Journal
+      </button>
     </form>
-    <br />
-    <!-- <div class="remember-me--forget-password">
-      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+    <div class="auth-footer-links">
+      <a href="{% url 'password_reset' %}">
+        <i class="fa-solid fa-key me-1"></i> Forgotten your password?
+      </a>
     </div>
-    <br /> -->
   </div>
 </div>
-{% endblock %}
+{% endblock content %}

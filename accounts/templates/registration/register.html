@@ -1,29 +1,50 @@
-{% extends "../base.html" %} {% load static %} {% block links %}
-<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" />
-{% endblock links %} {% block title %} Blog:Register {% endblock title %} {%
-block content %}
-<div class="box-form box-register">
-  <div class="left">
-    <div class="overlay">
-      <h1>Hello World.</h1>
-      <p>All you need in TECH.</p>
-    </div>
-  </div>
-  <div class="right">
-    <h5>Register</h5>
-    <p>Do have an account? <a href="{% url 'login' %}">Login</a></p>
-    <form class="inputs" method="post" action="{% url 'accounts:register' %}">
-      {% csrf_token %} {{ form }}
-      <input type="submit" value="Register" />
+{% extends "../base.html" %}
+{% load static %}
+
+{% block title %}Create Account — Postify{% endblock title %}
+
+{% block content %}
+<div class="editorial-auth-shell">
+  <div class="editorial-auth-card">
+    <header class="auth-header">
+      <div class="auth-meta-badge">Reader Registration · The Living Journal</div>
+      <h1 class="auth-title">Join the Journal</h1>
+      <p class="auth-subtitle">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign In</a>
+      </p>
+    </header>
+
+    {% if form.errors %}
+      <div class="editorial-alert alert-error" role="alert" style="margin-bottom: 20px;">
+        <div>
+          <strong>Registration Notice:</strong> Please correct the highlighted requirements below.
+        </div>
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:register' %}" class="editorial-auth-form">
+      {% csrf_token %}
+      
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ forloop.counter }}. {{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <span class="helptext">{{ field.help_text }}</span>
+          {% endif %}
+          {% if field.errors %}
+            {{ field.errors }}
+          {% endif %}
+        </div>
+      {% endfor %}
+
       <input type="hidden" name="next" value="{{ next }}" />
+
+      <button type="submit" class="btn-editorial btn-editorial-primary auth-submit-btn">
+        <i class="fa-solid fa-user-plus me-2"></i> Register Account
+      </button>
     </form>
-
-    <br /><br />
-
-    <!-- <div class="remember-me--forget-password">
-      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-    </div>
-    <br /> -->
   </div>
 </div>
-{% endblock %}
+{% endblock content %}

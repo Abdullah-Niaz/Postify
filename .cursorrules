@@ -1,0 +1,22 @@
+# Postify AI Rules & Condensed Context (Token-Optimized)
+
+## Stack & Architecture
+- Django 4+, SQLite/PostgreSQL, Bootstrap 5.2, Vanilla JS + jQuery, FontAwesome.
+- Core Apps: `blog` (posts, comments, voting, bookmarks, categories) | `accounts` (auth, registration).
+- Core Config: `Postify/settings.py`, `Postify/urls.py`.
+
+## Data Models
+- `Article`: owner(FK->User), title(char), desc(char), artImage(image), content(md), category(multiselect: javascript, web develpment, react, python, other), created(dt), bookmarks(M2M->User), upvote(M2M->User), downvote(M2M->User).
+- `Comment`: owner(FK->User), article(FK->Article), created(dt), content(text max 200).
+
+## UI/UX & CSS Tokens
+- Background: `--base-color: #0f0f1b;`, `--second-color: #171727;`, `--mid-color: #161e2e;`.
+- Accents: `--bs-cyan: #0dcaf0;`, `--back-color: #bbe1fa;`.
+- Postcard layout with dark card styling in `blog/static/blog/css/index.css`.
+
+## Coding & Security Conventions
+1. Always use absolute paths in fetch (`/save/${id}`, `/vote/${id}`, `/comment/${id}`), NEVER relative (`save/${id}`).
+2. Always check DOM elements existence before adding event listeners in `main.js` (e.g. `if (commentBtn)`).
+3. Do not use `@csrf_exempt` on state-mutating endpoints; include `X-CSRFToken` header in JS fetch requests.
+4. Keep templates DRY: extract postcard markup into `blog/templates/includes/_postcard.html`.
+5. Static & Media: Always use `{% static 'path' %}` or `{{ post.artImage.url }}` with fallback, never hardcoded `../../media/`.

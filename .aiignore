@@ -1,0 +1,20 @@
+# Ignore high-token & binary directories for AI / LLM context
+env/
+venv/
+*env/
+db.sqlite3
+*.sqlite3
+media/
+art_photos/
+staticfiles/
+__pycache__/
+*.pyc
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+.git/
+package-lock.json
+LICENSE

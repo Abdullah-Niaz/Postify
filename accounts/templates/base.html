@@ -1,25 +1,12 @@
+{% extends 'layout.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans"
-      rel="stylesheet"
-    />
 
-    {% block links %} {% endblock links %}
+{% block title %}Reader Access — Postify{% endblock title %}
 
-    <title>{% block title %} Blog {% endblock title %}</title>
-    <link
-      rel="shortcut icon"
-      type="image/png"
-      href="{% static 'blog/images/logo.png' %}"
-    />
-  </head>
-  <body>
-    {% block content %} {% endblock content %}
-  </body>
-</html>
+{% block links %}
+  <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" />
+{% endblock links %}
+
+{% block body %}
+  {% block content %}{% endblock content %}
+{% endblock body %}

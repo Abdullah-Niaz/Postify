@@ -1,6 +1,27 @@
 {% extends "../base.html" %}
+{% load static %}
+
+{% block title %}Signed Out — Postify{% endblock title %}
 
 {% block content %}
-  <p>Logged out!</p>
-  <a href="{% url 'login'%}">Click here to login again.</a>
-{% endblock %}
+<div class="editorial-auth-shell">
+  <div class="editorial-auth-card auth-success-slate">
+    <div class="success-icon">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </div>
+    <div class="auth-meta-badge">Reader Session Concluded</div>
+    <h1 class="auth-title">You Have Signed Out</h1>
+    <p class="auth-subtitle" style="margin-bottom: 24px;">
+      Thank you for reading The Living Journal. We look forward to your return.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'login' %}" class="btn-editorial btn-editorial-primary">
+        Sign In Again
+      </a>
+      <a href="{% url 'blog:index' %}" class="btn-editorial btn-editorial-ghost">
+        Return to Front Page
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
