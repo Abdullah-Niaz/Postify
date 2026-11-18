@@ -1,18 +1,29 @@
-asgiref==3.8.1
-attrs==20.3.0
-crispy-bootstrap5==2025.6
-dj-database-url==3.0.0
-Django==4.2.23
-django-crispy-forms==2.4
-django-filter==22.1
-django-multiselectfield==0.1.12
-djangorestframework==3.13.1
-Markdown==3.4.1
-markdown2==2.4.3
-Pillow==9.2.0
-psycopg2-binary==2.9.10
-python-dotenv==1.1.1
-pytz==2025.2
-sqlparse==0.5.3
-typing_extensions==4.14.0
-whitenoise==6.9.0
+# ==============================================================================
+# Postify - Production & Development Dependencies
+# ==============================================================================
+
+# Core Web Framework
+Django>=4.2,<6.0
+
+# Form Rendering & Bootstrap 5 Styling
+django-crispy-forms>=2.3
+crispy-bootstrap5>=2024.2
+
+# Custom Model Fields
+django-multiselectfield>=1.0.0
+
+# Markdown Rendering (used in blog/views.py)
+markdown2>=2.4.0
+
+# Image & Media Handling (required for Article.artImage ImageField)
+Pillow>=10.0.0
+
+# Static Files Serving (for Production & Vercel deployment)
+whitenoise>=6.6.0
+
+# Environment Variables & Database Configuration
+python-dotenv>=1.0.0
+dj-database-url>=2.1.0
+
+# PostgreSQL Driver (for Production / Supabase / Neon deployment)
+psycopg2-binary>=2.9.9
