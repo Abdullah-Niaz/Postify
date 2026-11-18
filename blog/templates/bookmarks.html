@@ -1,88 +1,51 @@
-{% extends './layout.html' %} {% load static %} {% block title %} BookMarks
-{%endblock title %} {% block links %}
-<link rel="stylesheet" href="{% static 'blog/css/index.css' %}" />
-{% endblock links %} {% block body %}
-<div class="container blog-content">
-  {% for post in postsMarked %}
-  <article class="postcard dark blue" data-card="{{post.id}}">
-    <a class="postcard__img_link" href="{% url 'blog:singleArt' post.id %}">
-      {% if post.artImage %}
-      <img
-        class="postcard__img"
-        src="{{ post.artImage.url }}"
-        alt="Image Title"
-      />
-      {% else %}
-      <img
-        class="postcard__img"
-        src="../../media/images/default.jpg"
-        alt="Image Title"
-      />
-      {% endif %}
-    </a>
-    <div class="postcard__text">
-      <h1 class="postcard__title blue">
-        <a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a>
-      </h1>
-      <div class="postcard__subtitle small">
-        <i class="fas fa-calendar-alt mr-2"></i>{{ post.created }}
-      </div>
-      <div class="postcard__bar"></div>
-      <div class="postcard__preview-txt">{{ post.desc }}</div>
-      <ul class="postcard__tagbox">
-        {% for cat in post.category %}
-        <li class="tag__item"><i class="fas fa-tag mr-2"></i>{{cat}}</li>
-        {% endfor %}
-        <!-- <li class="tag__item"><i class="fas fa-clock mr-2"></i>5 mins.</li> -->
-        {% if user.is_authenticated %} {% if user in post.bookmarks.all %}
-        <li class="tag__item play blue save saved" id="{{ post.pk}}">
-          <i class="fa-regular fa-bookmark"></i
-          ><span class="save-txt">Saved</span>
-        </li>
-        {% else %}
-        <li
-          class="tag__item play save blue pointed"
-          id="{{post.id}}"
-          data-bs-toggle="tooltip"
-          data-bs-title="Default tooltip"
-        >
-          <i class="fa-regular fa-bookmark"></i
-          ><span class="save-txt">Save</span>
-        </li>
-        {% endif %} {% if user != post.owner %} {% if user in post.upvote.all %}
-        <li class="tag__item play blue vote voted" data-vote="{{ post.id }}">
-          <i class="fa-solid fa-angle-up"></i
-          ><span class="vote-num">{{ post.upvote.count }}</span>
-        </li>
-        {% else %}
-        <li class="tag__item play blue vote" data-vote="{{ post.id }}">
-          <i class="fa-solid fa-angle-up"></i
-          ><span class="vote-num">{{ post.upvote.count }}</span>
-        </li>
-        {% endif %} {% else %}
-        <li class="tag__item play blue">
-          <span>{{ post.upvote.count }} vote</span>
-        </li>
-        {% endif %} {% if user == post.owner %}
-        <li
-          class="tag__item play blue delete pointed"
-          data-delete="{{post.id}}"
-        >
-          <i class="fa-regular fa-trash-can"></i>
-        </li>
-        <a href="{% url 'blog:update' post.id %}">
-          <li class="tag__item play blue pointed" data-update="{{post.id}}">
-            <i class="fa-regular fa-pen-to-square"></i> Update
-          </li>
-        </a>
-        {% endif %} {% endif %}
-      </ul>
-    </div>
-  </article>
-  {% empty %}
-  <div class="alert alert-info" role="alert">
-    <strong>There are no Aritcles Saved right now.</strong>
+{% extends './layout.html' %}
+{% load static %}
+
+{% block title %}Personal Reading List — Postify{% endblock title %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'blog/css/bookmarks.css' %}" />
+<link rel="stylesheet" href="{% static 'blog/css/index.css' %}?v=20261119-r1" />
+{% endblock links %}
+
+{% block body %}
+<!-- Reading List Masthead -->
+<section class="reading-list-header">
+  <div>
+    <div class="reading-list-meta">Reader Archives · Personal Register</div>
+    <h1 class="reading-list-title">Curated Reading List</h1>
   </div>
+  <div>
+    <span class="reading-list-badge">
+      {{ postsMarked|length }} Saved Stor{{ postsMarked|length|pluralize:"y,ies" }}
+    </span>
+  </div>
+</section>
+
+{% if not postsMarked %}
+<div class="editorial-empty-state">
+  <div class="empty-state-icon">
+    <i class="fa-regular fa-bookmark"></i>
+  </div>
+  <h2 class="empty-state-title">Your Reading List is Pristine</h2>
+  <p class="empty-state-text">
+    You haven't bookmarked any dispatches yet. While exploring The Living Journal, click the bookmark icon on any story
+    to save it for quiet contemplation here.
+  </p>
+  <div>
+    <a href="{% url 'blog:index' %}" class="btn-editorial btn-editorial-primary">
+      Explore Front Page Dispatches
+    </a>
+  </div>
+</div>
+{% else %}
+<!-- Bookmarked Stories Stream -->
+<div class="editorial-rows-container">
+  {% for post in postsMarked %}
+  {% with post=post card_style="row" row_number=forloop.counter %}
+  {% include "./includes/_article_item.html" %}
+  {% endwith %}
   {% endfor %}
 </div>
+{% endif %}
 {% endblock body %}

@@ -1,44 +1,155 @@
-.categorys {
-  width: 90%;
-  margin: 40px auto;
+/* ==========================================================================
+   POSTIFY — Categories & Topic Directory Styles ("The Living Journal")
+   ========================================================================== */
+
+/* Directory Header */
+.directory-masthead-header {
+  border-bottom: 2px solid var(--border-strong);
+  padding-bottom: 20px;
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.directory-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-vermilion);
+  margin-bottom: 6px;
+}
+
+.directory-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Category Cards Grid (Directory View) */
+.categories-directory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  grid-column-gap: 40px;
-  grid-row-gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
 }
-.profile-card-2 {
-  /* max-width: 300px; */
-  /* background-color: #fff; */
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
-  background-position: center;
-  overflow: hidden;
+
+.category-directory-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-subtle);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+  transition: all var(--transition-fast);
   position: relative;
-  margin: 10px auto;
-  cursor: pointer;
-  border-radius: 10px;
-  border: 2px solid var(--bs-cyan);
   overflow: hidden;
 }
 
-.profile-card-2 img {
-  transition: all linear 0.25s;
-  width: 100%;
-}
-
-.profile-card-2 .profile-name {
+.category-directory-card::before {
+  content: "";
   position: absolute;
-  left: 30px;
-  bottom: 70px;
-  font-size: 30px;
-  color: #fff;
-  text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-  font-weight: bold;
-  transition: all linear 0.25s;
-}
-.profile-card-2:hover img {
-  filter: grayscale(100%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  transition: background-color var(--transition-fast);
 }
 
-.profile-card-2:hover .profile-name {
-  bottom: 80px;
+.category-directory-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--border-strong);
+}
+
+.category-directory-card:hover::before {
+  background-color: var(--accent-vermilion);
+}
+
+.cat-card-number {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--accent-vermilion);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.cat-card-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.cat-card-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.cat-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-hairline);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
+.cat-card-count {
+  color: var(--text-muted);
+}
+
+.cat-card-arrow {
+  color: var(--accent-vermilion);
+  font-weight: 600;
+  transition: transform var(--transition-fast);
+}
+
+.category-directory-card:hover .cat-card-arrow {
+  transform: translateX(4px);
+}
+
+/* Category Archive Sibling Quickbar */
+.sibling-categories-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.sibling-pill {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-rule);
+  color: var(--text-secondary);
+  background-color: var(--bg-surface);
+  transition: all var(--transition-fast);
+}
+
+.sibling-pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.sibling-pill.active {
+  background-color: var(--text-primary);
+  color: var(--bg-canvas);
+  border-color: var(--text-primary);
+  font-weight: 600;
 }

@@ -1,0 +1,276 @@
+{% load static %}
+{% if card_style == 'lead' %}
+  <!-- Featured Hero Editorial Story -->
+  <article class="editorial-lead-article" data-card="{{ post.id }}">
+    <div class="lead-grid">
+      <div class="lead-content">
+        <div class="editorial-kicker">
+          <span class="kicker-badge">The latest story</span>
+          {% for cat in post.category %}
+            <a href="{% url 'blog:category' cat %}" class="editorial-tag">{% if cat == 'web develpment' %}Web Development{% else %}{{ cat }}{% endif %}</a>
+          {% endfor %}
+        </div>
+        
+        <h1 class="lead-title">
+          <a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a>
+        </h1>
+
+        <p class="lead-summary">
+          {{ post.desc }}
+        </p>
+
+        <div class="lead-byline">
+          <div class="author-monogram">{{ post.owner.username|slice:":1" }}</div>
+          <div class="byline-meta">
+            <span class="byline-author">{{ post.owner.username }}</span>
+            <span class="byline-date">
+              <time datetime="{{ post.created|date:'c' }}">{{ post.created|date:"F d, Y" }}</time>
+              <span class="meta-dot">·</span>
+              <span>{{ post.reading_minutes }} min read</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="lead-actions">
+          <a href="{% url 'blog:singleArt' post.id %}" class="btn-read-dispatch">
+            Read the story <i class="fa-solid fa-arrow-right"></i>
+          </a>
+
+          <div class="action-buttons-group">
+            {% if user.is_authenticated %}
+              <!-- Bookmark -->
+              <button
+                type="button"
+                class="action-btn save-btn {% if user in post.bookmarks.all %}saved{% endif %}"
+                aria-pressed="{% if user in post.bookmarks.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+                aria-label="{% if user in post.bookmarks.all %}Remove from bookmarks{% else %}Bookmark this story{% endif %}"
+              >
+                <i class="{% if user in post.bookmarks.all %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark"></i>
+                <span class="action-btn-label">{% if user in post.bookmarks.all %}Saved{% else %}Save{% endif %}</span>
+              </button>
+
+              <!-- Upvote -->
+              <button
+                type="button"
+                class="action-btn vote-btn {% if user in post.upvote.all %}voted{% endif %}"
+                aria-pressed="{% if user in post.upvote.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+                aria-label="Upvote article"
+              >
+                <i class="fa-solid fa-arrow-up"></i>
+                <span class="vote-count">{{ post.upvote.count }}</span>
+              </button>
+
+              {% if user == post.owner %}
+                <a href="{% url 'blog:update' post.id %}" class="action-btn edit-btn" aria-label="Edit article">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <button
+                  type="button"
+                  class="action-btn delete-btn"
+                  data-id="{{ post.id }}"
+                  aria-label="Delete article"
+                >
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              {% endif %}
+            {% else %}
+              <a href="{% url 'login' %}" class="action-btn" aria-label="Sign in to save">
+                <i class="fa-regular fa-bookmark"></i>
+                <span class="action-btn-label">Save</span>
+              </a>
+              <span class="action-btn static-count">
+                <i class="fa-solid fa-arrow-up"></i> {{ post.upvote.count }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="lead-media">
+        <a href="{% url 'blog:singleArt' post.id %}" class="media-frame" aria-label="Read {{ post.title }}">
+          {% if post.artImage %}
+            <img src="{{ post.artImage.url }}" alt="{{ post.title }}" loading="eager" fetchpriority="high" />
+          {% else %}
+            <div class="editorial-media-fallback">
+              <i class="fa-solid fa-feather-pointed"></i>
+              <span>The Living Journal</span>
+            </div>
+          {% endif %}
+        </a>
+      </div>
+    </div>
+  </article>
+
+{% elif card_style == 'split' %}
+  <!-- Secondary Feature Split -->
+  <article class="editorial-secondary-card" data-card="{{ post.id }}">
+    <div class="card-media">
+      <a href="{% url 'blog:singleArt' post.id %}" class="card-media-link" aria-label="Read {{ post.title }}">
+        {% if post.artImage %}
+          <img src="{{ post.artImage.url }}" alt="{{ post.title }}" loading="lazy" />
+        {% else %}
+          <div class="editorial-media-fallback fallback-sm">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+        {% endif %}
+      </a>
+    </div>
+    
+    <div class="card-body">
+      <span class="story-overline">From the journal</span>
+      <div class="editorial-kicker">
+        {% for cat in post.category %}
+          <a href="{% url 'blog:category' cat %}" class="editorial-tag">{% if cat == 'web develpment' %}Web Development{% else %}{{ cat }}{% endif %}</a>
+        {% endfor %}
+      </div>
+
+      <h2 class="card-title">
+        <a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a>
+      </h2>
+
+      <p class="card-excerpt">{{ post.desc|truncatewords:24 }}</p>
+      <a class="card-read-link" href="{% url 'blog:singleArt' post.id %}">Read story <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+
+      <div class="card-footer">
+        <div class="card-author-info">
+          <span class="author-name">{{ post.owner.username }}</span>
+          <span class="meta-dot">·</span>
+          <time datetime="{{ post.created|date:'c' }}">{{ post.created|date:"M d, Y" }}</time>
+        </div>
+
+        <div class="card-actions">
+          {% if user.is_authenticated %}
+            <button
+              type="button"
+              class="action-btn-sm save-btn {% if user in post.bookmarks.all %}saved{% endif %}"
+              aria-pressed="{% if user in post.bookmarks.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+              title="Bookmark story"
+              aria-label="Save story"
+            >
+              <i class="{% if user in post.bookmarks.all %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark"></i>
+            </button>
+            <button
+              type="button"
+              class="action-btn-sm vote-btn {% if user in post.upvote.all %}voted{% endif %}"
+              aria-pressed="{% if user in post.upvote.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+              title="Upvote story"
+              aria-label="Upvote story"
+            >
+              <i class="fa-solid fa-arrow-up"></i>
+              <span class="vote-count">{{ post.upvote.count }}</span>
+            </button>
+            {% if user == post.owner %}
+              <a href="{% url 'blog:update' post.id %}" class="action-btn-sm" title="Edit story" aria-label="Edit">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+              <button
+                type="button"
+                class="action-btn-sm delete-btn"
+                data-id="{{ post.id }}"
+                title="Delete story"
+                aria-label="Delete"
+              >
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            {% endif %}
+          {% else %}
+            <span class="action-btn-sm static-count">
+              <i class="fa-solid fa-arrow-up"></i> {{ post.upvote.count }}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </article>
+
+{% else %}
+  <!-- Story Digest Row (Editorial Row with Numbering) -->
+  <article class="editorial-story-row" data-card="{{ post.id }}">
+    <div class="row-index">
+      {% if row_number %}
+        <span>{{ row_number|stringformat:"02d" }}</span>
+      {% else %}
+        <span>—</span>
+      {% endif %}
+    </div>
+
+    <div class="row-main">
+      <div class="row-header">
+        <div class="editorial-kicker">
+          {% for cat in post.category %}
+            <a href="{% url 'blog:category' cat %}" class="editorial-tag">{% if cat == 'web develpment' %}Web Development{% else %}{{ cat }}{% endif %}</a>
+          {% endfor %}
+        </div>
+        <span class="row-date">{{ post.created|date:"M d, Y" }}</span>
+      </div>
+
+      <h3 class="row-title">
+        <a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a>
+      </h3>
+
+      <p class="row-desc">{{ post.desc }}</p>
+
+      <div class="row-meta">
+        <span class="row-author">By <strong>{{ post.owner.username }}</strong></span>
+        <span class="meta-dot">·</span>
+        <span class="row-readtime">{{ post.reading_minutes }} min read</span>
+      </div>
+    </div>
+
+    {% if post.artImage %}
+    <div class="row-thumbnail">
+      <a href="{% url 'blog:singleArt' post.id %}" aria-label="Read {{ post.title }}">
+        <img src="{{ post.artImage.url }}" alt="{{ post.title }}" loading="lazy" />
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="row-actions">
+      {% if user.is_authenticated %}
+        <button
+          type="button"
+          class="action-btn-sm save-btn {% if user in post.bookmarks.all %}saved{% endif %}"
+          aria-pressed="{% if user in post.bookmarks.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+          title="Bookmark story"
+          aria-label="Save story"
+        >
+          <i class="{% if user in post.bookmarks.all %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark"></i>
+        </button>
+        <button
+          type="button"
+          class="action-btn-sm vote-btn {% if user in post.upvote.all %}voted{% endif %}"
+          aria-pressed="{% if user in post.upvote.all %}true{% else %}false{% endif %}"
+                data-id="{{ post.id }}"
+          title="Upvote story"
+          aria-label="Upvote story"
+        >
+          <i class="fa-solid fa-arrow-up"></i>
+          <span class="vote-count">{{ post.upvote.count }}</span>
+        </button>
+        {% if user == post.owner %}
+          <a href="{% url 'blog:update' post.id %}" class="action-btn-sm" title="Edit story" aria-label="Edit">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+          <button
+            type="button"
+            class="action-btn-sm delete-btn"
+            data-id="{{ post.id }}"
+            title="Delete story"
+            aria-label="Delete"
+          >
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        {% endif %}
+      {% else %}
+        <span class="action-btn-sm static-count">
+          <i class="fa-solid fa-arrow-up"></i> {{ post.upvote.count }}
+        </span>
+      {% endif %}
+    </div>
+  </article>
+{% endif %}

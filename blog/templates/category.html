@@ -1,92 +1,96 @@
-{% extends './layout.html' %} {% load static %} {% block title %} {{ endblock
-title }} {% endblock title %} {% block links %}
-<link rel="stylesheet" href="{% static 'blog/css/index.css' %}" />
-{% endblock links %} {% block body %}
-<div class="header">
-  <h1>All Articles in {{title}}🤩</h1>
-  <hr />
-</div>
-<div class="container blog-content">
-  {% for post in targetArticle %}
-  <article class="postcard dark blue" data-card="{{post.id}}">
-    <a class="postcard__img_link" href="{% url 'blog:singleArt' post.id %}">
-      {% if post.artImage %}
-      <img
-        class="postcard__img"
-        src="{{ post.artImage.url }}"
-        alt="Image Title"
-      />
-      {% else %}
-      <img
-        class="postcard__img"
-        src="../../media/images/default.jpg"
-        alt="Image Title"
-      />
-      {% endif %}
-    </a>
-    <div class="postcard__text">
-      <h1 class="postcard__title blue">
-        <a href="{% url 'blog:singleArt' post.id %}">{{ post.title }}</a>
-      </h1>
-      <div class="postcard__subtitle small">
-        <i class="fas fa-calendar-alt mr-2"></i>{{ post.created }}
-      </div>
-      <div class="postcard__bar"></div>
-      <div class="postcard__preview-txt">{{ post.desc }}</div>
-      <ul class="postcard__tagbox">
-        {% for cat in post.category %}
-        <li class="tag__item"><i class="fas fa-tag mr-2"></i>{{cat}}</li>
-        {% endfor %}
-        <!-- <li class="tag__item"><i class="fas fa-clock mr-2"></i>5 mins.</li> -->
-        {% if user.is_authenticated %} {% if user in post.bookmarks.all %}
-        <li class="tag__item play blue save saved" id="{{ post.pk}}">
-          <i class="fa-regular fa-bookmark"></i
-          ><span class="save-txt">Saved</span>
-        </li>
-        {% else %}
-        <li
-          class="tag__item play save blue pointed"
-          id="{{post.id}}"
-          data-bs-toggle="tooltip"
-          data-bs-title="Default tooltip"
-        >
-          <i class="fa-regular fa-bookmark"></i
-          ><span class="save-txt">Save</span>
-        </li>
-        {% endif %} {% if user != post.owner %} {% if user in post.upvote.all %}
-        <li class="tag__item play blue vote voted" data-vote="{{ post.id }}">
-          <i class="fa-solid fa-angle-up"></i
-          ><span class="vote-num">{{ post.upvote.count }}</span>
-        </li>
-        {% else %}
-        <li class="tag__item play blue vote" data-vote="{{ post.id }}">
-          <i class="fa-solid fa-angle-up"></i
-          ><span class="vote-num">{{ post.upvote.count }}</span>
-        </li>
-        {% endif %} {% else %}
-        <li class="tag__item play blue">
-          <span>{{ post.upvote.count }} vote</span>
-        </li>
-        {% endif %} {% if user == post.owner %}
-        <li
-          class="tag__item play blue delete pointed"
-          data-delete="{{post.id}}"
-        >
-          <i class="fa-regular fa-trash-can"></i>
-        </li>
-        <a href="{% url 'blog:update' post.id %}">
-          <li class="tag__item play blue pointed" data-update="{{post.id}}">
-            <i class="fa-regular fa-pen-to-square"></i> Update
-          </li>
-        </a>
-        {% endif %} {% endif %}
-      </ul>
-    </div>
-  </article>
-  {% empty %}
-  <div class="alert alert-info" role="alert">
-    <strong>There are no Aritcles on this category.</strong>
+{% extends './layout.html' %}
+{% load static %}
+
+{% block title %}Category: {{ title }} — Postify{% endblock title %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
+<link rel="stylesheet" href="{% static 'blog/css/index.css' %}?v=20261119-r1" />
+{% endblock links %}
+
+{% block body %}
+<!-- Topic Header -->
+<section class="directory-masthead-header">
+  <div>
+    <div class="directory-meta">Classified Archive · Subject Register</div>
+    <h1 class="directory-title">{{ title }}</h1>
   </div>
+  <div class="d-flex align-items-center gap-3">
+    <span class="query-count-badge">{{ targetArticle|length }} Dispatch{{ targetArticle|length|pluralize:"es" }}</span>
+    <a href="{% url 'blog:categories' %}" class="btn-editorial btn-editorial-ghost">
+      <i class="fa-solid fa-layer-group"></i> All Topics
+    </a>
+  </div>
+</section>
+
+<!-- Sibling Categories Filter Bar -->
+<div class="sibling-categories-bar" aria-label="Explore other categories">
+  <a href="{% url 'blog:category' 'javascript' %}"
+    class="sibling-pill {% if raw_title == 'javascript' %}active{% endif %}">
+    JavaScript
+  </a>
+  <a href="{% url 'blog:category' 'python' %}" class="sibling-pill {% if raw_title == 'python' %}active{% endif %}">
+    Python
+  </a>
+  <a href="{% url 'blog:category' 'react' %}" class="sibling-pill {% if raw_title == 'react' %}active{% endif %}">
+    React
+  </a>
+  <a href="{% url 'blog:category' 'web develpment' %}"
+    class="sibling-pill {% if raw_title == 'web develpment' %}active{% endif %}">
+    Web Development
+  </a>
+  <a href="{% url 'blog:category' 'other' %}" class="sibling-pill {% if raw_title == 'other' %}active{% endif %}">
+    Other
+  </a>
+</div>
+
+<!-- Articles in this Category -->
+{% if not targetArticle %}
+<div class="editorial-empty-state">
+  <div class="empty-state-icon">
+    <i class="fa-solid fa-tag"></i>
+  </div>
+  <h2 class="empty-state-title">No Dispatches in {{ title }}</h2>
+  <p class="empty-state-text">
+    The archive for {{ title }} is currently open for submissions. Contribute a technical essay or inquiry to inaugurate
+    this topic.
+  </p>
+  <div>
+    {% if user.is_authenticated %}
+    <a href="{% url 'blog:add' %}" class="btn-editorial btn-editorial-primary">
+      <i class="fa-solid fa-pen-nib"></i> Compose Dispatch for {{ title }}
+    </a>
+    {% else %}
+    <a href="{% url 'blog:index' %}" class="btn-editorial btn-editorial-ghost">
+      Browse All Dispatches
+    </a>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<!-- Featured First Story in Category -->
+{% with post=targetArticle.0 card_style="lead" %}
+{% include "./includes/_article_item.html" %}
+{% endwith %}
+
+{% if targetArticle|length > 1 %}
+<div class="editorial-section-header">
+  <div class="section-label">
+    <span class="bullet-num">§</span>
+    <span>Additional Dispatches in {{ title }}</span>
+  </div>
+  <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+    SUBJECT ARCHIVE
+  </span>
+</div>
+
+<div class="editorial-rows-container">
+  {% for post in targetArticle|slice:"1:" %}
+  {% with post=post card_style="row" row_number=forloop.counter %}
+  {% include "./includes/_article_item.html" %}
+  {% endwith %}
   {% endfor %}
 </div>
+{% endif %}
+{% endif %}
 {% endblock body %}

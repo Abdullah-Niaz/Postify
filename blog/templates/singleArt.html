@@ -1,78 +1,242 @@
-{% extends './layout.html' %} 
-{% load static %} 
-{% block title %} 
-{{ post.title}} 
-{% endblock title %} 
+{% extends './layout.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} — Postify{% endblock title %}
+
 {% block links %}
-<link rel="stylesheet" href="{% static 'blog/css/singleArt.css' %}" />
-<link rel="stylesheet" href="{% static 'blog/css/add.css' %}">
-{% endblock links %} 
+  <link rel="stylesheet" href="{% static 'blog/css/singleArt.css' %}?v=20261119-r1" />
+{% endblock links %}
+
 {% block body %}
-<div class="container art-info">
-  <div class="art-header">
-    <div class="title">
-      <h1>{{ post.title }}</h1>
+<article class="reading-view-container" data-card="{{ post.id }}">
+  <!-- Article Header -->
+  <header class="article-masthead-header">
+    <div class="article-topic-kicker">
+      {% for cat in post.category %}
+        <a href="{% url 'blog:category' cat %}" class="editorial-tag">{% if cat == 'web develpment' %}Web Development{% else %}{{ cat }}{% endif %}</a>
+      {% endfor %}
     </div>
-    <div class="desc">
-      {{ post.desc }}
+
+    <h1 class="article-main-title">{{ post.title }}</h1>
+
+    <div class="article-summary-deck">{{ post.desc }}</div>
+
+    <div class="article-byline-strip">
+      <div class="byline-author-pill">
+        <span class="author-circle">{{ post.owner.username|slice:":1" }}</span>
+        <span>Written by {{ post.owner.username }}</span>
+      </div>
+      <span class="meta-dot">·</span>
+      <time datetime="{{ post.created|date:'c' }}">
+        <i class="fa-regular fa-calendar-days me-1"></i> {{ post.created|date:"F d, Y" }}
+      </time>
+      <span class="meta-dot">·</span>
+      <span id="reading-time-estimate"><i class="fa-regular fa-clock me-1"></i> {{ post.reading_minutes }} min read</span>
     </div>
-    <div class="about">
-      <p>Written By: {{ post.owner }}</p>
-      <p style="font-style:italic ;"><i class="fas fa-calendar-alt mr-2"></i>{{ post.created }}</p>
-      <ul class="category">
-        {% for cat in post.category %}
-        <li class="item"><i class="fas fa-tag mr-2"></i>{{cat}}</li>
-        {% endfor %}
-      </ul>
+  </header>
+
+  <!-- Featured Photography / Media Frame -->
+  {% if post.artImage %}
+    <div class="article-feature-image-frame">
+      <img src="{{ post.artImage.url }}" alt="{{ post.title }}" />
+      <div class="image-caption-rule">
+        <span>PLATE I. FEATURED DISPATCH IMAGERY</span>
+        <span>PHOTOGRAPH / SOURCE ARCHIVE</span>
+      </div>
     </div>
-    <div class="image">
-      
-      {% if post.artImage %}
-      <img src="{{ post.artImage.url }}" alt="article photo">
-      {% else %}
-      <img src="../../media/images/default.jpg" alt="article photo">
-      {% endif %}
-        
-    </div>
-  </div>
-  <div class="art-info-content">{{content|safe}}</div>
-  <hr>
-</div>
-<div class="comments container">
-  <h1>Comments</h1>
-  {% if user.is_authenticated %}
-    <div class="add-comment">
-      <form action="" class="input-comment">
-        {% csrf_token %}
-        <div class="title-art input-comment2">
-          <input type="text" placeholder="Write a comment.." class="form-control" id = "comment-content" required name="comment">
-        </div>
-        <input type="submit" value="Post" class="btn btn-outline-info" id="add-comment" data-comment="{{ post.id }}">
-      </form>
-    </div>
-  {% else %}
-  <div class="alert alert-info" role="alert">
-    <a href="{% url 'login' %}">Login</a> to write a comment..
-  </div>
   {% endif %}
-  <p style = "margin-top: 5px;"><span id="comment-count">{{ comments.count }}</span> Comment</p>
-  <div class="all-comments">
-    {% for comment in comments %}
-      <div class="one-comment">
-        <div class="header-comment">
-          <h4>@{{ comment.owner }}</h4>
-          <small style="color: var(--bs-cyan);">{{ comment.created }}</small>
+
+  <!-- Reading Layout (Sidebar + Article Body) -->
+  <div class="article-reading-grid">
+    <!-- Sticky Companion Sidebar (Left) -->
+    <aside class="reading-companion-sidebar" aria-label="Reading Companion">
+      <!-- Progress Indicator -->
+      <div class="sidebar-block d-none d-lg-block">
+        <div class="sidebar-title">
+          <i class="fa-solid fa-compass"></i> Reading Status
         </div>
-        <div class="content">
-          <p>{{ comment.content }}</p>
+        <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-vermilion); font-weight: 600;">
+          <span id="reading-progress-percent">0</span>% Completed
         </div>
       </div>
-    {% empty%}
-    <div id="no-comment">
-      <h3> No comments right now... </h3>
+
+      <!-- Table of Contents (Dynamically populated by JS) -->
+      <div class="sidebar-block d-none d-lg-block" id="toc-container" style="display: none;">
+        <div class="sidebar-title">
+          <i class="fa-solid fa-list-ol"></i> Contents
+        </div>
+        <nav>
+          <ul class="toc-list" id="toc-list"></ul>
+        </nav>
+      </div>
+
+      <!-- Story Actions -->
+      <div class="sidebar-block">
+        <div class="sidebar-title">
+          <i class="fa-solid fa-sliders"></i> Actions
+        </div>
+        <div class="companion-actions">
+          {% if user.is_authenticated %}
+            <!-- Bookmark Button -->
+            <button
+              type="button"
+              class="companion-action-btn save-btn {% if user in post.bookmarks.all %}saved{% endif %}"
+              data-id="{{ post.id }}"
+              id="{{ post.id }}"
+              aria-label="Bookmark"
+            >
+              <span>
+                <i class="{% if user in post.bookmarks.all %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark me-2"></i>
+                <span class="save-txt">{% if user in post.bookmarks.all %}Saved{% else %}Bookmark{% endif %}</span>
+              </span>
+              <i class="fa-solid fa-check check-indicator {% if user not in post.bookmarks.all %}d-none{% endif %}"></i>
+            </button>
+
+            <!-- Upvote Button -->
+            <button
+              type="button"
+              class="companion-action-btn vote-btn {% if user in post.upvote.all %}voted{% endif %}"
+              data-id="{{ post.id }}"
+              data-vote="{{ post.id }}"
+              aria-label="Upvote article"
+            >
+              <span>
+                <i class="fa-solid fa-arrow-up me-2"></i> Upvote
+              </span>
+              <span class="vote-num">{{ post.upvote.count }}</span>
+            </button>
+
+            <!-- Author Controls (Edit / Delete) -->
+            {% if user == post.owner %}
+              <a href="{% url 'blog:update' post.id %}" class="companion-action-btn" aria-label="Edit Dispatch">
+                <span><i class="fa-solid fa-pen-to-square me-2"></i> Edit Story</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+
+              <button
+                type="button"
+                class="companion-action-btn delete-btn"
+                data-id="{{ post.id }}"
+                data-delete="{{ post.id }}"
+                aria-label="Delete Dispatch"
+                style="color: var(--accent-vermilion);"
+              >
+                <span><i class="fa-regular fa-trash-can me-2"></i> Delete</span>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </button>
+            {% endif %}
+
+          {% else %}
+            <a href="{% url 'login' %}" class="companion-action-btn">
+              <span><i class="fa-regular fa-bookmark me-2"></i> Bookmark</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Sign in</span>
+            </a>
+            <div class="companion-action-btn" style="cursor: default;">
+              <span><i class="fa-solid fa-arrow-up me-2"></i> Upvotes</span>
+              <span class="vote-num">{{ post.upvote.count }}</span>
+            </div>
+          {% endif %}
+
+          <!-- Share Link Button -->
+          <button type="button" class="companion-action-btn" id="btn-copy-share" aria-label="Copy share link">
+            <span><i class="fa-regular fa-share-from-square me-2"></i> Share</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Copy URL</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Reading Column -->
+    <div class="article-reading-body">
+      <!-- Article Content (Markdown Rendered) -->
+      <div class="art-article-body" id="article-prose">
+        {{ content|safe }}
+      </div>
+
+      <!-- Author Colophon Box -->
+      <div class="article-colophon-box">
+        <div class="colophon-monogram">{{ post.owner.username|slice:":1" }}</div>
+        <div class="colophon-text">
+          <h4>Published by {{ post.owner.username }}</h4>
+          <p>
+            Contributing author to The Living Journal. Documented in the permanent archives on {{ post.created|date:"F d, Y" }}.
+          </p>
+        </div>
+      </div>
+
+      <!-- Discussion & Comments Section -->
+      <section class="discussion-section" id="discussion">
+        <div class="discussion-header">
+          <h2 class="discussion-title">Discussion</h2>
+          <span class="comment-count-badge">
+            <span id="comment-count">{{ comments.count }}</span> Entr{{ comments.count|pluralize:"y,ies" }}
+          </span>
+        </div>
+
+        {% if user.is_authenticated %}
+          <!-- Comment Composer Form -->
+          <div class="comment-composer">
+            <form id="comment-form" data-article-id="{{ post.id }}">
+              {% csrf_token %}
+              <label for="comment-content" class="form-label" style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; display: block;">
+                Contribute to the Discussion as @{{ user.username }}
+              </label>
+              <textarea
+                id="comment-content"
+                name="comment"
+                class="comment-textarea"
+                placeholder="Share your perspective, question, or constructive critique…"
+                required
+                rows="3"
+              ></textarea>
+              <div class="comment-form-footer">
+                <button
+                  type="submit"
+                  class="btn-editorial btn-editorial-primary"
+                  id="add-comment"
+                  data-comment="{{ post.id }}"
+                >
+                  <i class="fa-solid fa-paper-plane"></i> Publish Comment
+                </button>
+              </div>
+            </form>
+          </div>
+        {% else %}
+          <div class="editorial-alert" style="margin-bottom: 32px;">
+            <div>
+              <i class="fa-solid fa-circle-info me-2" style="color: var(--accent-vermilion);"></i>
+              <a href="{% url 'login' %}?next={{ request.path }}" style="font-weight: 600; text-decoration: underline;">
+                Sign in to the Journal
+              </a> to join this discussion and publish replies.
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Comments Stream -->
+        <div class="comments-stream all-comments">
+          {% for comment in comments %}
+            <div class="editorial-comment-card one-comment">
+              <div class="comment-card-header">
+                <div class="comment-author-badge">
+                  <span class="comment-avatar">{{ comment.owner.username|slice:":1" }}</span>
+                  <span class="comment-author-name">@{{ comment.owner.username }}</span>
+                </div>
+                <time class="comment-timestamp" datetime="{{ comment.created|date:'c' }}">
+                  {{ comment.created|date:"M d, Y · g:i A" }}
+                </time>
+              </div>
+              <div class="comment-body content">
+                <p>{{ comment.content }}</p>
+              </div>
+            </div>
+          {% empty %}
+            <div class="no-comments-slate" id="no-comment">
+              <p>No perspectives recorded on this dispatch yet. Be the first to begin the inquiry.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
     </div>
-    {% endfor %}
-      
   </div>
-</div>
+</article>
 {% endblock body %}

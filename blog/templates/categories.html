@@ -1,41 +1,51 @@
-{% extends './layout.html' %} {% load static %} {% block title %} Categories
-{%endblock title %} {% block links %}
-<link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
-{% endblock links %} {% block body %}
-<div class="header">
-  <h1>Categories😎</h1>
-  <hr />
-</div>
-<div class="categorys">
-  <a href="{% url 'blog:category' 'javascript' %}"
-    ><div class="profile-card-2">
-      <img src="../../media/images/javascript.jpg" class="img img-responsive" />
-      <div class="profile-name">JavaScript</div>
-    </div></a
-  >
-  <a href="{% url 'blog:category' 'python' %}"
-    ><div class="profile-card-2">
-      <img src="../../media/images/python.jpg" class="img img-responsive" />
-      <div class="profile-name">Python</div>
-    </div></a
-  >
-  <a href="{% url 'blog:category' 'react' %}"
-    ><div class="profile-card-2">
-      <img src="../../media/images/react.jpg" class="img img-responsive" />
-      <div class="profile-name">React</div>
-    </div></a
-  >
-  <a href="{% url 'blog:category' 'web develpment' %}"
-    ><div class="profile-card-2">
-      <img src="../../media/images/web.jpg" class="img img-responsive" />
-      <div class="profile-name">Web Devolpment</div>
-    </div></a
-  >
-  <a href="{% url 'blog:category' 'other' %}"
-    ><div class="profile-card-2">
-      <img src="../../media/images/other.jpg" class="img img-responsive" />
-      <div class="profile-name">Other..</div>
-    </div></a
-  >
+{% extends './layout.html' %}
+{% load static %}
+
+{% block title %}Topic Index & Subject Directory — Postify{% endblock title %}
+
+{% block links %}
+  <link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
+{% endblock links %}
+
+{% block body %}
+<section class="directory-masthead-header">
+  <div>
+    <div class="directory-meta">Classified Archives · Subject Index</div>
+    <h1 class="directory-title">Curated Topics & Registers</h1>
+  </div>
+  <div>
+    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">
+      5 PRIMARY COMPENDIUMS
+    </span>
+  </div>
+</section>
+
+<!-- Category Cards Directory Grid -->
+<div class="categories-directory-grid">
+  {% for stat in category_stats %}
+    <a href="{% url 'blog:category' stat.slug %}" class="category-directory-card">
+      <div>
+        <div class="cat-card-number">{{ forloop.counter|stringformat:"02d" }}</div>
+        <h2 class="cat-card-name">{{ stat.label }}</h2>
+        <p class="cat-card-desc">
+          {% if stat.slug == 'javascript' %}
+            Modern ECMAScript idioms, runtime behaviors, browser internals, and node ecosystems.
+          {% elif stat.slug == 'python' %}
+            Pythonic design patterns, backend frameworks, data structures, and systemic tooling.
+          {% elif stat.slug == 'react' %}
+            Component architecture, reactive primitives, state management, and modern rendering.
+          {% elif stat.slug == 'web develpment' %}
+            Full-stack engineering, networking protocols, databases, CSS layout, and accessibility.
+          {% else %}
+            Miscellaneous inquiries, software design reflections, and interdisciplinary musings.
+          {% endif %}
+        </p>
+      </div>
+      <div class="cat-card-footer">
+        <span class="cat-card-count">{{ stat.count }} Dispatch{{ stat.count|pluralize:"es" }}</span>
+        <span class="cat-card-arrow">Explore Archive <i class="fa-solid fa-arrow-right"></i></span>
+      </div>
+    </a>
+  {% endfor %}
 </div>
 {% endblock body %}

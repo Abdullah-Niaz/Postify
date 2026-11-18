@@ -31,6 +31,11 @@ class Article(models.Model):
     class Meta:
         ordering = ['-created']
 
+    @property
+    def reading_minutes(self):
+        """Approximate reading time, using the same pace as the reader view."""
+        return max(1, (len(self.content.split()) + 209) // 210)
+
     def __str__(self):
         return f'{self.owner} writes an article at {self.created}'
 

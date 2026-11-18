@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Postify Living Journal Administration{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <!-- Editorial Admin Design System -->
+  <link rel="stylesheet" href="{% static 'blog/css/editorial_admin.css' %}" />
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}">
+    POSTIFY<span class="admin-dot">.</span>
+    <span class="admin-subtitle">The Living Journal · Editorial Desk</span>
+  </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #a49e94; margin-right: 18px; text-transform: uppercase;">
+  <a href="/" target="_blank" style="color: #fbf8f3; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+    <span>View Live Publication</span> &rarr;
+  </a>
+</div>
+{% endblock %}

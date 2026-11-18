@@ -5,188 +5,297 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Editorial Webfonts: Newsreader, Plus Jakarta Sans, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'blog/css/icons.css' %}" />
+
+    <!-- Bootstrap 5 CSS Grid Utilities -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
-      integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="{% static 'blog/css/layout.css' %}" />
-    <script
-      src="https://kit.fontawesome.com/4e362c2153.js"
-      crossorigin="anonymous"
-    ></script>
-    {% block links %} {% endblock links %}
 
-    <title>{% block title %} Blog {% endblock title %}</title>
+    <!-- Master Editorial Design System -->
+    <link rel="stylesheet" href="{% static 'blog/css/layout.css' %}?v=20261119-r1" />
+    
+    <title>{% block title %}Postify — The Living Journal{% endblock title %}</title>
+    
     <link
       rel="shortcut icon"
       type="image/png"
       href="{% static 'blog/images/logo.png' %}"
     />
+    
+    {% block links %}{% endblock links %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="padding: 15px">
-      <div class="container-fluid">
-        <a
-          class="navbar-brand"
-          href="{% url 'blog:index' %}"
-          style="color: var(--bs-cyan); font-family: monospace; font-size: 28px"
-          >Blogging</a
-        >
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto ulNav">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="{% url 'blog:index' %}"
-                ><i class="fa-solid fa-house"></i>My Feed</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'blog:categories' %}"
-                ><i class="fa-solid fa-layer-group"></i>Categories</a
-              >
-            </li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="{% url 'blog:add' %}"
-                ><i class="fa-regular fa-pen-to-square"></i>Add Article</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="{% url 'blog:bookmarks' %}"
-                ><i class="fa-solid fa-book-bookmark"></i>Bookmarks</a
-              >
-            </li>
-            <li class="nav-item dropdown active">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i class="fa-regular fa-circle-user"></i> {{user}}
-              </a>
-              <ul class="dropdown-menu">
-                <!-- <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li> -->
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" href="{% url 'logout' %}"
-                    ><i class="fa-solid fa-arrow-right-from-bracket"></i
-                    >Logout</a
-                  >
-                </li>
-              </ul>
-            </li>
-            {% else %}
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'accounts:register' %}"
-                >Register</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'login' %}">Login</a>
-            </li>
-            {% endif %}
-          </ul>
-          <form
-            class="d-flex"
-            role="search"
-            method="get"
-            action="{% url 'blog:index' %}"
-          >
-            <input
-              class="form-control me-2 input-search"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              name="q"
-            />
-            <button class="btn btn-outline-info search" type="submit">
-              Search
-            </button>
-          </form>
+    <a class="skip-link" href="#main-content">Skip to stories</a>
+    <!-- Reading Progress Bar (activated on reading pages) -->
+    <div id="reading-progress-bar" style="position: fixed; top: 0; left: 0; height: 3px; background: var(--accent-vermilion); z-index: 9999; width: 0%; transition: width 0.1s linear;"></div>
+
+    <!-- Editorial Header Shell -->
+    <header class="editorial-header">
+      <!-- Top Ticker Bar -->
+      <div class="editorial-ticker">
+        <div class="ticker-inner">
+          <div class="ticker-edition">
+            <span class="edition-badge">IDEAS WORTH READING</span>
+            <span>THE LIVING JOURNAL</span>
+            <span class="d-none d-md-inline">· CODE, CULTURE & CRAFT</span>
+          </div>
+          <div class="ticker-meta">
+            <span class="thisDate"></span>
+            
+          </div>
         </div>
       </div>
-    </nav>
-    <div class="blog-content1">
-      {% block body %} {% endblock body %}
-      <div id="snackbar"></div>
-    </div>
-    <div class="footer">
-      <footer
-        class="text-center text-lg-start text-white"
-        style="background-color: #1c2331"
-      >
-        <section class="footer-social">
-          <a href="mailto:abdullahniaz423@gmail.com">
-            <i class="fa-regular fa-envelope"></i>
-          </a>
-          <a href="https://www.linkedin.com/in/Abdullah-Niaz/">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="https://github.com/Abdullah-Niaz">
-            <i class="fab fa-github"></i>
-          </a>
-        </section>
-        <!-- Copyright -->
-        <div
-          class="text-center p-3"
-          style="background-color: rgba(0, 0, 0, 0.2)"
-        >
-          © <span class="thisYear"></span>
-          <a
-            class=""
-            target="_blank"
-            href="https://www.linkedin.com/in/Abdullah-Niaz"
-            >Abdullah</a
-          >
-          All Rights Reserved.
+
+      <!-- Main Masthead Brand -->
+      <div class="editorial-masthead">
+        <div class="masthead-inner">
+          <div class="masthead-left">
+            <span>DISPATCHES & ESSAYS</span>
+            <br />
+            <span style="color: var(--accent-vermilion);">FREE & OPEN ACCESS</span>
+          </div>
+          
+          <div class="masthead-center">
+            <a href="{% url 'blog:index' %}" class="journal-wordmark" aria-label="Postify Homepage">
+              POSTIFY<span class="accent-dot">.</span>
+            </a>
+            <div class="journal-tagline">Thoughts, Architecture & Technical Inquiries</div>
+          </div>
+
+          <div class="masthead-right">
+            {% if user.is_authenticated %}
+              <a href="{% url 'blog:add' %}" class="btn-editorial btn-editorial-primary">
+                <i class="fa-solid fa-pen-nib"></i> Write Dispatch
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}" class="btn-editorial btn-editorial-ghost">
+                Sign In
+              </a>
+              <a href="{% url 'accounts:register' %}" class="btn-editorial btn-editorial-primary">
+                Join the journal
+              </a>
+            {% endif %}
+          </div>
         </div>
-        <!-- Copyright -->
-      </footer>
-      <!-- Footer -->
-    </div>
-    <!-- End of .container -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script>
-      const date = new Date();
-      const year = document.querySelector(".thisYear");
-      year.innerHTML = date.getFullYear();
-    </script>
-    <script src="{% static 'blog/js/main.js' %}"></script>
-    <script>
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-      });
-    </script>
+      </div>
+
+      <!-- Editorial Navigation & Categories -->
+      <nav class="editorial-nav-bar" aria-label="Primary Navigation">
+        <div class="nav-bar-inner">
+          <ul class="category-nav-list">
+            <li class="category-nav-item {% if request.resolver_match.url_name == 'index' and not search %}active{% endif %}">
+              <a href="{% url 'blog:index' %}">
+                <i class="fa-solid fa-feather"></i> All Stories
+              </a>
+            </li>
+            <li class="category-nav-item {% if raw_title == 'javascript' %}active{% endif %}">
+              <a href="{% url 'blog:category' 'javascript' %}">JavaScript</a>
+            </li>
+            <li class="category-nav-item {% if raw_title == 'python' %}active{% endif %}">
+              <a href="{% url 'blog:category' 'python' %}">Python</a>
+            </li>
+            <li class="category-nav-item {% if raw_title == 'react' %}active{% endif %}">
+              <a href="{% url 'blog:category' 'react' %}">React</a>
+            </li>
+            <li class="category-nav-item {% if raw_title == 'web develpment' %}active{% endif %}">
+              <a href="{% url 'blog:category' 'web develpment' %}">Web Development</a>
+            </li>
+            <li class="category-nav-item {% if raw_title == 'other' %}active{% endif %}">
+              <a href="{% url 'blog:category' 'other' %}">Other</a>
+            </li>
+            <li class="category-nav-item">
+              <a href="{% url 'blog:categories' %}">
+                <i class="fa-solid fa-layer-group"></i> Index
+              </a>
+            </li>
+          </ul>
+
+          <div class="nav-actions">
+            {% if user.is_authenticated %}<a class="reading-list-link" href="{% url 'blog:bookmarks' %}" aria-label="Your reading list"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></a>{% endif %}
+            <!-- Search Form -->
+            <form class="editorial-search-form" method="get" action="{% url 'blog:index' %}" role="search">
+              <input
+                class="editorial-search-input"
+                type="search"
+                placeholder="Search archives…"
+                aria-label="Search articles"
+                name="q"
+                value="{{ query|default:'' }}"
+              />
+              <button class="editorial-search-btn" type="submit" aria-label="Submit search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </form>
+
+            {% if user.is_authenticated %}
+              <!-- Reader Menu -->
+              <div class="user-menu-wrapper dropdown">
+                <button
+                  class="user-menu-btn dropdown-toggle"
+                  type="button"
+                  id="userMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span class="user-avatar-badge">{{ user.username|slice:":1" }}</span>
+                  <span class="d-none d-md-inline">{{ user.username }}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end editorial-dropdown-menu" aria-labelledby="userMenuButton">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'blog:bookmarks' %}">
+                      <i class="fa-regular fa-bookmark"></i> Reading List
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'blog:add' %}">
+                      <i class="fa-solid fa-plus"></i> New Dispatch
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'password_change' %}">
+                      <i class="fa-solid fa-key"></i> Change Password
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                      <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="site-main-content" id="main-content" tabindex="-1">
+      <!-- Django Notification Messages -->
+      {% if messages %}
+      <div class="editorial-messages-container">
+        {% for message in messages %}
+        <div class="editorial-alert alert-{{ message.tags|default:'info' }}" role="alert">
+          <div>
+            <strong>Notice:</strong> {{ message }}
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% block body %}{% endblock body %}
+    </main>
+
+    <!-- Notification Toast / Snackbar -->
+    <div id="snackbar" role="status" aria-live="polite"></div>
+
+    <!-- Editorial Colophon & Footer -->
+    <footer class="editorial-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>POSTIFY<span style="color: var(--accent-vermilion);">.</span></h3>
+            <p>An independent digital publication dedicated to thoughtful technical essays, software design, and engineering craft.</p>
+          </div>
+          
+          <div class="footer-col">
+            <h5>Sections</h5>
+            <ul class="footer-links">
+              <li><a href="{% url 'blog:index' %}">All Dispatches</a></li>
+              <li><a href="{% url 'blog:category' 'javascript' %}">JavaScript</a></li>
+              <li><a href="{% url 'blog:category' 'python' %}">Python</a></li>
+              <li><a href="{% url 'blog:category' 'react' %}">React</a></li>
+              <li><a href="{% url 'blog:category' 'web develpment' %}">Web Development</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Reader Space</h5>
+            <ul class="footer-links">
+              {% if user.is_authenticated %}
+                <li><a href="{% url 'blog:bookmarks' %}">Reading List</a></li>
+                <li><a href="{% url 'blog:add' %}">Author a Dispatch</a></li>
+                <li><a href="{% url 'logout' %}">Sign Out</a></li>
+              {% else %}
+                <li><a href="{% url 'login' %}">Reader Sign In</a></li>
+                <li><a href="{% url 'accounts:register' %}">Create Account</a></li>
+              {% endif %}
+              <li><a href="{% url 'blog:categories' %}">Category Directory</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Colophon</h5>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">
+              Typeset in Newsreader & Plus Jakarta Sans. Designed with care.
+            </p>
+            <div class="footer-social-icons">
+              <a href="https://github.com/Abdullah-Niaz" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <i class="fa-brands fa-github"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/Abdullah-Niaz/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin"></i>
+              </a>
+              <a href="mailto:abdullahniaz423@gmail.com" aria-label="Email Editor">
+                <i class="fa-regular fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>
+            © <span class="current-year"></span> Postify Living Journal. All rights reserved.
+          </div>
+          <div>
+            Published by <a href="https://www.linkedin.com/in/Abdullah-Niaz/" target="_blank" style="color: var(--text-primary); font-weight: 600;">Abdullah Niaz</a>.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- Postify Main Client JavaScript -->
+    <script src="{% static 'blog/js/main.js' %}?v=20261119-r1"></script>
+    <script>
+      // Populate current date in masthead & colophon
+      const now = new Date();
+      const dateEl = document.querySelector(".thisDate");
+      if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        });
+      }
+      const yearEl = document.querySelector(".current-year");
+      if (yearEl) {
+        yearEl.textContent = now.getFullYear();
+      }
+    </script>
   </body>
 </html>
