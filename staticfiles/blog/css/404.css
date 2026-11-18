@@ -1,37 +1,55 @@
-*{
-  transition: all 0.6s;
-}
+/* ==========================================================================
+   POSTIFY — Editorial 404 Page ("The Living Journal")
+   ========================================================================== */
 
-html {
-  height: 100%;
-}
-
-body{
-  font-family: 'Lato', sans-serif;
-  color: var(--bs-cyan);
-  margin: 0;
-}
-
-#main{
-  display: table;
-  width: 100%;
-  height: 100vh;
+.editorial-error-shell {
+  max-width: 680px;
+  margin: 60px auto 80px;
   text-align: center;
 }
 
-.fof{
-  display: table-cell;
-  vertical-align: middle;
+.error-meta-badge {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-vermilion);
+  margin-bottom: 8px;
 }
 
-.fof h1{
-  font-size: 50px;
-  display: inline-block;
-  padding-right: 12px;
-  animation: type .5s alternate infinite;
+.error-numeral {
+  font-family: var(--font-serif);
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--accent-vermilion);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
 }
 
-@keyframes type{
-  from{box-shadow: inset -3px 0px 0px var(--bs-cyan);}
-  to{box-shadow: inset -3px 0px 0px transparent;}
+.error-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.error-explanation {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 520px;
+  margin: 0 auto 36px;
+}
+
+.error-suggested-links {
+  border-top: 1px solid var(--border-rule);
+  padding-top: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }

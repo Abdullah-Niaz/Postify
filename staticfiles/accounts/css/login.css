@@ -1,167 +1,155 @@
-body {
-  background-image: linear-gradient(135deg, #00353f 10%, #001233 100%);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  font-family: "Open Sans", sans-serif;
-  color: #333333;
+/* ==========================================================================
+   POSTIFY — Editorial Authentication & Account Management Styles
+   ========================================================================== */
+
+.editorial-auth-shell {
+  max-width: 520px;
+  margin: 36px auto 60px;
 }
 
-.box-form {
-  margin: 35px auto;
-  width: 80%;
-  background: #ffffff;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex: 1 1 100%;
-  align-items: stretch;
-  justify-content: space-between;
-  box-shadow: 0 0 20px 6px #00000f30;
-}
-@media (max-width: 980px) {
-  .box-form {
-    flex-flow: wrap;
-    align-content: center;
-    align-items: center;
-    width: 90%;
-  }
-  .box-form .left {
-    text-align: center;
-  }
-}
-.box-form div {
-  height: auto;
-}
-.box-form .left {
-  color: #ffffff;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url("../images/muha-ajjan-sL2BRR1cuvM-unsplash.jpg");
-  overflow: hidden;
-  width: 100%;
-}
-.box-form .left .overlay {
-  padding: 30px;
-  width: 100%;
-  height: 100%;
-  background: #00033684;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-.box-form .left .overlay h1 {
-  font-size: 10vmax;
-  line-height: 1;
-  font-weight: 900;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-.box-form .left .overlay span p {
-  margin-top: 30px;
-  font-weight: 900;
-}
-.box-form .left .overlay span a {
-  background: #3b5998;
-  color: #ffffff;
-  margin-top: 10px;
-  padding: 14px 50px;
-  border-radius: 100px;
-  display: inline-block;
-  box-shadow: 0 3px 6px 1px #042d4657;
-}
-.box-form .left .overlay span a:last-child {
-  background: #1dcaff;
-  margin-left: 30px;
-}
-.box-form .right {
-  padding: 40px;
-  overflow: hidden;
-}
-@media (max-width: 980px) {
-  .box-form .right {
-    width: 100%;
-  }
-}
-.box-form .right h5 {
-  font-size: 3vmax;
-  line-height: 0;
-}
-.box-form .right p {
-  font-size: 14px;
-  color: #b0b3b9;
-}
-.box-form .right .inputs {
-  overflow: hidden;
-}
-.box-form .right input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  outline: none;
-  border-bottom: 2px solid #b0b3b9;
-}
-.box-form .right .remember-me--forget-password {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.box-form .right .remember-me--forget-password input {
-  margin: 0;
-  margin-right: 7px;
-  width: auto;
-}
-.box-form .right button {
-  float: right;
-  color: #fff;
-  font-size: 16px;
-  padding: 12px 35px;
-  border-radius: 50px;
-  display: inline-block;
-  border: 0;
-  outline: 0;
-  box-shadow: 0px 4px 20px 0px #49c628a6;
-  background-image: linear-gradient(135deg, #70f570 10%, #49c628 100%);
+.editorial-auth-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-subtle);
+  padding: 44px 40px;
+  box-shadow: var(--shadow-subtle);
 }
 
-label {
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.auth-meta-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-vermilion);
+  margin-bottom: 6px;
+}
+
+.auth-title {
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.auth-subtitle a {
+  color: var(--accent-vermilion);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.auth-subtitle a:hover {
+  color: var(--accent-vermilion-hover);
+}
+
+/* Auth Form Fields */
+.editorial-auth-form .form-group {
+  margin-bottom: 22px;
+}
+
+.editorial-auth-form label {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
   display: block;
-  position: relative;
-  margin-top: 5px;
+  margin-bottom: 6px;
 }
 
-label:hover::before .text-checkbox {
-  background: #70f570;
+.editorial-auth-form input[type="text"],
+.editorial-auth-form input[type="password"],
+.editorial-auth-form input[type="email"] {
+  width: 100%;
+  background-color: var(--bg-canvas);
+  border: 1px solid var(--border-rule);
+  border-radius: var(--radius-subtle);
+  padding: 12px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
 }
 
-label span.text-checkbox {
-  display: inline-block;
-  height: auto;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s linear;
+.editorial-auth-form input:focus {
+  outline: none;
+  border-color: var(--accent-vermilion);
+  background-color: var(--bg-surface);
+  box-shadow: 0 0 0 3px var(--accent-vermilion-wash);
 }
 
-input[type="submit"] {
-  margin-top: 30px;
-  cursor: pointer;
+.editorial-auth-form .helptext {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
 }
-input[type="submit"]:hover {
-  background-color: #5961f94f;
-}
-.error {
-  background-color: #00353f;
-  padding: 15px;
-  border-radius: 10px;
-}
-.errorlist {
+
+.editorial-auth-form ul.errorlist {
   list-style: none;
-  background-color: #00353f;
-  padding: 15px;
-  border-radius: 10px;
-  color: #fff;
+  padding: 0;
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--accent-vermilion);
 }
-.helptext {
-  font-size: smaller;
-  color: #3b5898ca;
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-footer-links {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-hairline);
+  text-align: center;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.auth-footer-links a {
+  color: var(--text-secondary);
+}
+
+.auth-footer-links a:hover {
+  color: var(--accent-vermilion);
+}
+
+/* Success Slate */
+.auth-success-slate {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin: 0 auto 18px;
 }

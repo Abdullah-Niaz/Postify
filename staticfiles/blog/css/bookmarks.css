@@ -1,0 +1,53 @@
+/* ==========================================================================
+   POSTIFY — Personal Reading List / Bookmarks ("The Living Journal")
+   ========================================================================== */
+
+.reading-list-header {
+  border-bottom: 2px solid var(--border-strong);
+  padding-bottom: 20px;
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.reading-list-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-vermilion);
+  margin-bottom: 6px;
+}
+
+.reading-list-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.reading-list-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background-color: var(--bg-parchment);
+  border: 1px solid var(--border-rule);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+}
+
+/* Remove button in bookmarks */
+.btn-remove-bookmark {
+  color: var(--accent-vermilion);
+  border-color: var(--accent-vermilion-border);
+  background-color: var(--accent-vermilion-wash);
+}
+
+.btn-remove-bookmark:hover {
+  background-color: var(--accent-vermilion);
+  color: #ffffff;
+  border-color: var(--accent-vermilion);
+}
