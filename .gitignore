@@ -1,2 +1,31 @@
-*env
+# Environments
+*env/
+env/
+venv/
 .env
+
+screenshot
+# Database
+db.sqlite3
+*.sqlite3
+
+# Media and Static assets
+media/
+art_photos/
+staticfiles/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# IDE & Editor caches
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
